@@ -5,20 +5,18 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+* Ruby version - ruby 2.6.3p62
 
-* System dependencies
+* Rails version - Rails 5.2.4.1
 
-* Configuration
+* Configuration - Go to project folder and run commands 
 
-* Database creation
+* bundle install
 
-* Database initialization
+* rake db:migrate
+
+* rails db:seed
+
+* rails s or * rails c
 
 * How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
