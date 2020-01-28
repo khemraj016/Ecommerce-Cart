@@ -1,0 +1,111 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<h1>Cart</h1>
+ 
+<div class="shopping-cart">
+ 
+  <div class="column-labels">
+    <label class="product-image">Image</label>
+    <label class="product-details">Product</label>
+    <label class="product-price">Price</label>
+    <label class="product-quantity">Quantity</label>
+  </div>
+ 	
+ 	<% @products.each do |product| %> 
+	  <div class="product">
+	    <div class="product-image">
+	    	<img src="/assets/logo.png">
+	    </div>
+	    <div class="product-details">
+	      <div class="product-title"> <%= product.item %> </div>
+	    </div>
+	    <div class="product-price"> <%= product.price %> </div>
+	    <div class="product-quantity">
+	      <input id="qt-<%=product.id%>" type="number" value="0" min="0">
+	    </div>
+	   	<div class="product-add">
+	      <button id="btn-<%=product.id%>" class="btn btn-success btn-sm" onclick="addToCart(<%= product.id%>)">ADD</button>
+	    </div>
+	    <input type="hidden" id="product_id" value= <%= product.id %> />
+	  </div>
+  <% end %>
+ 
+  <div class="totals" id="final_cart" style="display:none;">
+    <div class="totals-item">
+      <label>Subtotal</label>
+      <div class="totals-value" id="cart-subtotal">0</div>
+    </div>
+    <div class="totals-item">
+     	<label>Discount price</label>
+      <div class="totals-value" id="discount">0</div>
+    </div>
+    <div class="totals-item">
+     	<label>Additial discount on total purchase</label>
+      <div class="totals-value" id="additial-discount">0</div>
+    </div>
+    <div class="totals-item totals-item-total">
+      <label>Grand Total</label>
+      <div class="totals-value" id="cart-total">0</div>
+    </div>
+  </div>
+  <button class="checkout" onclick="paymentDetails()">Billing Details</button>
+  <button class="clear-checkout" onclick="window.location.reload();">Clear Cart</button>
+</div>
+
+<script>
+	function addToCart(product_id) {
+		var quantity = $(".product-quantity input#qt-"+ product_id).val();
+	  document.getElementById("btn-" + product_id).disabled = true;
+	  
+	  $.ajax({
+      type: "POST",
+      url: "http://localhost:3000/products/cart",
+      data: JSON.stringify({product: {'id': product_id, 'quantity': quantity}}),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success: function(response) {
+    	alert('Item successfully added to your cart');
+      	document.getElementById("btn-" + product_id).disabled = false;
+      }
+    });
+	}
+
+	function paymentDetails() {
+		var fadeTime = 300;
+		var subtotal;
+		var discount_price;
+		var additial_discount;
+		var cart_total;
+		
+		$.ajax({
+      type: "GET",
+      url: "http://localhost:3000/products/calculate",
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success: function(response) {
+      	if(response.success) {
+      		$('#cart-subtotal').html(response['data']['cart_price']);
+      		$('#discount').html(response['data']['discount_price']);
+      		$('#additial-discount').html(response['data']['additional_discount']);
+      		$('#cart-total').html(response['data']['total']);
+      		document.getElementById("final_cart").style.display = "block";
+      	}
+      }
+    });
+	}
+
+	function clearCart() {
+		$.ajax({
+      type: "GET",
+      url: "http://localhost:3000/products/cart_clear",
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success: function(response) {
+      }
+    });
+	}
+
+  if (performance.navigation.type == 1) {
+  	clearCart()
+  }
+</script>
