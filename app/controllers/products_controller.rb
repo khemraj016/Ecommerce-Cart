@@ -9,13 +9,13 @@ class ProductsController < ApplicationController
 
   def cart
     cart = Cart.where(user_id: guest_user.id, product_id: params[:product][:id]).first_or_initialize
-    cart.update_attributes!(quantity: params[:product][:quantity], status: 'active')
+    cart.update_attributes!(quantity: params[:product][:quantity], status: Cart.statuses[:active])
     render json: {success: true}
   end
 
   def cart_clear
-    carts = Cart.where(user_id: guest_user.id, status: 'active')
-    carts.update_all(quantity: 0, status: 'inactive')
+    carts = Cart.where(user_id: guest_user.id, status: Cart.statuses[:active])
+    carts.update_all(quantity: 0, status: Cart.statuses[:inactive])
     render json: {success: true}
   end
 
