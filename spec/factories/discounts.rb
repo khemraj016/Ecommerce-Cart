@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :discount do
-    name "MyString"
-    price 1
-    status "MyString"
+    name Faker::Lorem.word
+    price 75
+    total_quantity 3
   end
 end

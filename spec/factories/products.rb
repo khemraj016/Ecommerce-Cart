@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :product do
-    name "MyString"
-    price 1
+    item 'A'
+    price 30
+    status 'active'
   end
 end
