@@ -1,5 +1,5 @@
 class Discount < ApplicationRecord
-  validates :price, presence: true
+  validates :price, :total_quantity, presence: true
 
   has_many :product_discounts
 
