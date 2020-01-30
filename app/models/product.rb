@@ -1,8 +1,6 @@
 class Product < ApplicationRecord
   validates :item, :price, presence: true
 
-  has_many :product_discounts
-
   enum statuses: {active: 'active', inactive: 'inactive'}
 
   validates :status, inclusion: { in: Product.statuses.values }
