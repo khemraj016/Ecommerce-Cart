@@ -24,14 +24,7 @@ module ProductsHelper
       product_quantity_mapping[product_discount.product_id] -= product_discount.quantity
       total_quantity -= product_discount.quantity
     end
-    # discount_ids = []
-    # product_ids.each_with_index do |product_id, index|
-    #   discount_ids << ProductDiscount.where('product_id = ? and quantity <= ?', product_id, quantities[index]).pluck(:discount_id)
-    # end
-    # final_discount_ids = discount_ids.inject(:&)
-    # discount_price = Discount.where(id: final_discount_ids).active.pluck(:price).max.to_d
-    # total = discount_price.zero? ? cart_price : discount_price
-    
+
     if discount_price.present?
       total = discount_price
     end
