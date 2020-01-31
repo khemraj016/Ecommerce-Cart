@@ -15,7 +15,7 @@ Things you may want to cover:
 
 * rake db:migrate
 
-* rails db:seed
+* rake db:seed
 
 * rails s or * rails c
 
