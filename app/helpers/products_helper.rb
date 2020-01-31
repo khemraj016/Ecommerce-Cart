@@ -16,13 +16,15 @@ module ProductsHelper
 
     discount_price = 0
     discounts.each do |discount|
-      product_discount = discount.product_discounts.where(product_id: product_ids).last
+      product_discount = discount.product_discounts.where(product_id: product_ids)
       next if product_discount.blank?
-      cart = Cart.where(product_id: product_discount.product_id, quantity: product_discount.quantity)
+      cart = Cart.where(product_id: product_discount.pluck(:product_id), quantity: product_discount.pluck(:quantity))
       next if cart.blank?
       discount_price += discount.price
-      product_quantity_mapping[product_discount.product_id] -= product_discount.quantity
-      total_quantity -= product_discount.quantity
+      product_discount.each do |pd|
+        product_quantity_mapping[pd.product_id] -= pd.quantity
+        total_quantity -= pd.quantity
+      end
     end
 
     if discount_price.present?
@@ -35,7 +37,7 @@ module ProductsHelper
     end
     
     additional_discount = GlobalDiscount.where('cart_min_value <= ?', total).active.pluck(:discount).max.to_d
-    
+
     {
       cart_price: cart_price, discount_price: discount_price, 
       additional_discount: additional_discount, total: total - additional_discount
