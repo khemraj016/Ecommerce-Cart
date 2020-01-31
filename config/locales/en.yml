@@ -30,4 +30,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  discount:
+    price_error: 'Discount item price cannot be greater from actual item price'
+    quantity_error: 'Product quantities should be equal to discount item quantity'
