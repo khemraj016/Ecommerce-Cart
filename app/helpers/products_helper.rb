@@ -12,7 +12,7 @@ module ProductsHelper
     quantities = carts.pluck(:quantity)
 
     total_quantity = quantities.sum
-    discounts = Discount.where('total_quantity <= ?',  total_quantity)
+    discounts = Discount.where('total_quantity <= ?',  total_quantity).active
 
     discount_price = 0
     discounts.each do |discount|
@@ -33,7 +33,7 @@ module ProductsHelper
 
     carts.each do |cart|
       next if product_quantity_mapping[cart.product_id].zero?
-      total += cart.product.price
+      total += cart.product.price * cart.quantity
     end
     
     additional_discount = GlobalDiscount.where('cart_min_value <= ?', total).active.pluck(:discount).max.to_d
