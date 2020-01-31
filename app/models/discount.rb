@@ -7,5 +7,7 @@ class Discount < ApplicationRecord
 
   validates :status, inclusion: { in: Discount.statuses.values }
 
+  accepts_nested_attributes_for :product_discounts, allow_destroy: true
+
   scope :active, lambda{ where(status: Discount.statuses[:active]) }
 end
