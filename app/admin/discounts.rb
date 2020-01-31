@@ -24,7 +24,8 @@ ActiveAdmin.register Discount do
         product_ids << product_discount['product_id']
         quantities << product_discount['quantity']
       end
-      price = Product.where(id: product_ids).sum(:price).to_d
+      quantity_value = quantities.map(&:to_d).sum
+      price = Product.where(id: product_ids).sum(:price).to_d * quantity_value
 
       total_quantity = params[:discount][:total_quantity].to_d
       raise I18n.t('discount.price_error') if discount_price >= price
